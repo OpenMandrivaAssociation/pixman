@@ -1,7 +1,7 @@
 %define major 0
 %define apiver 1
-%define libname %mklibname %{name}-%{apiver} %{major}
-%define develname %mklibname %{name} -d
+%define libname %mklibname %{name}- %{apiver} %{major}
+%define develname %mklibname %{name}- -d %{apiver}
 
 Name:		pixman
 Summary:	A pixel manipulation library
@@ -19,7 +19,6 @@ Pixel manipulation Library.
 %package -n %{libname}
 Summary:	Pixel manipulation library
 Group:		System/Libraries
-Obsoletes:	%mklibname pixman 1
 
 %description -n %{libname}
 A library for manipulating pixel regions -- a set of Y-X banded
@@ -32,10 +31,7 @@ Summary:	Libraries and include files for developing with libpixman
 Group:		Development/C
 Requires:	%{libname} = %{version}
 Provides:	%{name}-devel = %{version}-%{release}
-Provides:	slim-devel
-Obsoletes:	slim-devel 
-Obsoletes:	%mklibname pixman 1 -d
-Provides:	%mklibname pixman 1 -d
+Provides:	lib%{name}-%{apiver}-devel = %version-%release
 
 %description -n %{develname}
 This package provides the necessary development libraries and include
