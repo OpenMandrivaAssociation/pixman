@@ -5,16 +5,17 @@
 
 Name:		pixman
 Summary:	A pixel manipulation library
-Version:	0.9.4
+Version:	0.9.5
 Release:	%mkrel 1
 License:	MIT
 Group:		System/Libraries
-URL:		http://xorg.freedesktop.org/
+URL:		http://gitweb.freedesktop.org/?p=pixman.git
 Source:		http://xorg.freedesktop.org/releases/individual/lib/%{name}-%{version}.tar.bz2
 BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 
 %description
 Pixel manipulation Library.
+
 
 %package -n %{libname}
 Summary:	Pixel manipulation library
@@ -25,7 +26,8 @@ A library for manipulating pixel regions -- a set of Y-X banded
 rectangles, image compositing using the Porter/Duff model
 and implicit mask generation for geometric primitives including
 trapezoids, triangles, and rectangles.
-    
+
+
 %package -n %{develname}
 Summary:	Libraries and include files for developing with libpixman
 Group:		Development/C
@@ -61,9 +63,9 @@ rm -rf %{buildroot}
 %{_libdir}/*%{apiver}.so.%{major}*
 
 %files -n %{develname}
-%defattr(-,root,root)
+%defattr(0644, root, root, 0755)
 %doc TODO
 %{_libdir}/*.so
 %{_libdir}/*.*a
-%{_includedir}/*
+%{_includedir}/pixman-1/*.h
 %{_libdir}/pkgconfig/*
