@@ -6,7 +6,7 @@
 Name:		pixman
 Summary:	A pixel manipulation library
 Version:	0.9.5
-Release:	%mkrel 2
+Release:	%mkrel 3
 License:	MIT
 Group:		System/Libraries
 URL:		http://gitweb.freedesktop.org/?p=pixman.git
