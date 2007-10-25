@@ -5,8 +5,8 @@
 
 Name:		pixman
 Summary:	A pixel manipulation library
-Version:	0.9.5
-Release:	%mkrel 3
+Version:	0.9.6
+Release:	%mkrel 1
 License:	MIT
 Group:		System/Libraries
 URL:		http://gitweb.freedesktop.org/?p=pixman.git
@@ -15,7 +15,6 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 
 %description
 Pixel manipulation Library.
-
 
 %package -n %{libname}
 Summary:	Pixel manipulation library
@@ -63,7 +62,7 @@ rm -rf %{buildroot}
 %{_libdir}/*%{apiver}.so.%{major}*
 
 %files -n %{develname}
-%defattr(0644, root, root, 0755)
+%defattr(0644,root,root,0755)
 %doc TODO
 %{_libdir}/*.so
 %{_libdir}/*.*a
