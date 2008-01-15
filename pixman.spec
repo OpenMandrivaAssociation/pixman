@@ -41,7 +41,6 @@ files to allow you to develop with pixman.
 
 %prep
 %setup -q
-%patch0 -p1 -b .visibility
 
 %build
 %configure2_5x
