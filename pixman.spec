@@ -5,12 +5,12 @@
 
 Name:		pixman
 Summary:	A pixel manipulation library
-Version:	0.10.0
-Release:	%mkrel 2
+Version:	0.11.8
+Release:	%mkrel 1
 License:	MIT
 Group:		System/Libraries
 URL:		http://gitweb.freedesktop.org/?p=pixman.git
-Source:		http://xorg.freedesktop.org/releases/individual/lib/%{name}-%{version}.tar.bz2
+Source:		http://xorg.freedesktop.org/releases/individual/lib/%{name}-%{version}.tar.gz
 Patch0:		pixman-visibility.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 
