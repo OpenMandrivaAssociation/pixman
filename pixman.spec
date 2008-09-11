@@ -1,17 +1,18 @@
 %define major 0
 %define apiver 1
 %define libname %mklibname %{name}- %{apiver} %{major}
-%define develname %mklibname %{name}- -d %{apiver}
+%define develname %mklibname %{name}- %{apiver} -d
 
-Name:		pixman
 Summary:	A pixel manipulation library
-Version:	0.11.8
+Name:		pixman
+Version:	0.11.10
 Release:	%mkrel 1
 License:	MIT
 Group:		System/Libraries
 URL:		http://gitweb.freedesktop.org/?p=pixman.git
-Source:		http://xorg.freedesktop.org/releases/individual/lib/%{name}-%{version}.tar.gz
+Source:		http://xorg.freedesktop.org/releases/individual/lib/%{name}-%{version}.tar.bz2
 Patch0:		pixman-visibility.patch
+Patch1:		%{name}-0.11.10-fix-stripes-rendering.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 
 %description
@@ -27,13 +28,13 @@ rectangles, image compositing using the Porter/Duff model
 and implicit mask generation for geometric primitives including
 trapezoids, triangles, and rectangles.
 
-
 %package -n %{develname}
 Summary:	Libraries and include files for developing with libpixman
 Group:		Development/C
-Requires:	%{libname} = %{version}
+Requires:	%{libname} = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
-Provides:	lib%{name}-%{apiver}-devel = %version-%release
+Provides:	lib%{name}-devel = %{version}-%{release}
+Provides:	lib%{name}-%{apiver}-devel = %{version}-%{release}
 
 %description -n %{develname}
 This package provides the necessary development libraries and include
@@ -41,8 +42,12 @@ files to allow you to develop with pixman.
 
 %prep
 %setup -q
+%patch1 -p1 -b .stripes
 
 %build
+# (tpg) library check for SSE extensions at runtime also, 
+# so no need to disable it for ix86
+
 %configure2_5x
 %make
 
@@ -72,4 +77,4 @@ rm -rf %{buildroot}
 %{_libdir}/*.so
 %{_libdir}/*.*a
 %{_includedir}/pixman-1/*.h
-%{_libdir}/pkgconfig/*
+%{_libdir}/pkgconfig/*.pc
