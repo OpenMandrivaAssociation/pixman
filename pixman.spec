@@ -5,14 +5,13 @@
 
 Summary:	A pixel manipulation library
 Name:		pixman
-Version:	0.11.10
+Version:	0.12.0
 Release:	%mkrel 1
 License:	MIT
 Group:		System/Libraries
 URL:		http://gitweb.freedesktop.org/?p=pixman.git
 Source:		http://xorg.freedesktop.org/releases/individual/lib/%{name}-%{version}.tar.bz2
 Patch0:		pixman-visibility.patch
-Patch1:		%{name}-0.11.10-fix-stripes-rendering.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 
 %description
@@ -42,7 +41,6 @@ files to allow you to develop with pixman.
 
 %prep
 %setup -q
-%patch1 -p1 -b .stripes
 
 %build
 # (tpg) library check for SSE extensions at runtime also, 
