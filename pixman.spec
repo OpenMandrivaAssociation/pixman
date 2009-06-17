@@ -5,7 +5,7 @@
 
 Summary:	A pixel manipulation library
 Name:		pixman
-Version:	0.15.10
+Version:	0.15.12
 Release:	%mkrel 1
 License:	MIT
 Group:		System/Libraries
