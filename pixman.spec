@@ -1,12 +1,12 @@
 %define major 0
 %define apiver 1
-%define libname %mklibname %{name}- %{apiver} %{major}
-%define develname %mklibname %{name}- %{apiver} -d
+%define libname %mklibname %{name} %{apiver} %{major}
+%define develname %mklibname %{name} -d
 
 Summary:	A pixel manipulation library
 Name:		pixman
-Version:	0.20.2
-Release:	%mkrel 2
+Version:	0.22.0
+Release:	%mkrel 1
 License:	MIT
 Group:		System/Libraries
 URL:		http://gitweb.freedesktop.org/?p=pixman.git
@@ -19,6 +19,7 @@ Pixel manipulation Library.
 %package -n %{libname}
 Summary:	Pixel manipulation library
 Group:		System/Libraries
+Obsoletes:	%{_lib}pixman-1_0 < 0.22.0
 
 %description -n %{libname}
 A library for manipulating pixel regions -- a set of Y-X banded
@@ -33,6 +34,7 @@ Requires:	%{libname} = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
 Provides:	lib%{name}-devel = %{version}-%{release}
 Provides:	lib%{name}-%{apiver}-devel = %{version}-%{release}
+Obsoletes:	%{_lib}pixman-1-devel < 0.22.0
 
 %description -n %{develname}
 This package provides the necessary development libraries and include
@@ -42,9 +44,6 @@ files to allow you to develop with pixman.
 %setup -q
 
 %build
-# (tpg) library check for SSE extensions at runtime also, 
-# so no need to disable it for ix86
-
 %configure2_5x
 %make
 
