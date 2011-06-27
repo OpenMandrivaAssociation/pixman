@@ -19,6 +19,7 @@ Pixel manipulation Library.
 %package -n %{libname}
 Summary:	Pixel manipulation library
 Group:		System/Libraries
+Provides:	%{_lib}pixman-1_0
 Obsoletes:	%{_lib}pixman-1_0 < 0.22.0
 
 %description -n %{libname}
@@ -44,7 +45,7 @@ files to allow you to develop with pixman.
 %setup -q
 
 %build
-%configure2_5x
+%configure2_5x --disable-static
 %make
 
 %install
