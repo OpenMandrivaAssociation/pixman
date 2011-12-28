@@ -11,7 +11,6 @@ License:	MIT
 Group:		System/Libraries
 URL:		http://gitweb.freedesktop.org/?p=pixman.git
 Source:		http://xorg.freedesktop.org/releases/individual/lib/%{name}-%{version}.tar.bz2
-BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 
 %description
 Pixel manipulation Library.
@@ -45,7 +44,8 @@ files to allow you to develop with pixman.
 %setup -q
 
 %build
-%configure2_5x --disable-static
+%configure2_5x \
+	--disable-static
 %make
 
 %install
@@ -53,25 +53,12 @@ rm -rf %{buildroot}
 
 %makeinstall_std
 
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
-
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
-
-%clean
-rm -rf %{buildroot}
-
 %files -n %{libname}
-%defattr(-,root,root)
 %{_libdir}/*%{apiver}.so.%{major}*
 
 %files -n %{develname}
-%defattr(0644,root,root,0755)
 %doc TODO
 %{_libdir}/*.so
-%{_libdir}/*.*a
 %{_includedir}/pixman-1/*.h
 %{_libdir}/pkgconfig/*.pc
+
