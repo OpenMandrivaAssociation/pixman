@@ -5,12 +5,12 @@
 
 Summary:	A pixel manipulation library
 Name:		pixman
-Version:	0.25.6
+Version:	0.26.0
 Release:	1
 License:	MIT
 Group:		System/Libraries
 URL:		http://gitweb.freedesktop.org/?p=pixman.git
-Source:		http://xorg.freedesktop.org/releases/individual/lib/%{name}-%{version}.tar.bz2
+Source0:	http://xorg.freedesktop.org/releases/individual/lib/%{name}-%{version}.tar.bz2
 
 %description
 Pixel manipulation Library.
@@ -49,8 +49,6 @@ files to allow you to develop with pixman.
 %make
 
 %install
-rm -rf %{buildroot}
-
 %makeinstall_std
 
 %files -n %{libname}
@@ -61,4 +59,3 @@ rm -rf %{buildroot}
 %{_libdir}/*.so
 %{_includedir}/pixman-1/*.h
 %{_libdir}/pkgconfig/*.pc
-
