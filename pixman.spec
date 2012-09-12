@@ -57,5 +57,6 @@ files to allow you to develop with pixman.
 %files -n %{develname}
 %doc TODO
 %{_libdir}/*.so
+%dir %{_includedir}/pixman-1
 %{_includedir}/pixman-1/*.h
 %{_libdir}/pkgconfig/*.pc
