@@ -55,7 +55,7 @@ files to allow you to develop with pixman.
 %{_libdir}/*%{apiver}.so.%{major}*
 
 %files -n %{develname}
-%doc TODO
+%doc README AUTHORS
 %{_libdir}/*.so
 %dir %{_includedir}/pixman-1
 %{_includedir}/pixman-1/*.h
