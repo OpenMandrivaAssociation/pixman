@@ -1,3 +1,4 @@
----
-sources:
+removed_sources:
   pixman-0.28.0.tar.bz2: cfc7a18a8811bf4ff0890f547c315bda8097f6ad
+sources:
+  pixman-0.29.2.tar.bz2: c1367c28cfb6a1c79c39b5df2d1a05351f57c702
