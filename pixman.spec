@@ -11,6 +11,7 @@ License:	MIT
 Group:		System/Libraries
 URL:		http://gitweb.freedesktop.org/?p=pixman.git
 Source0:	http://xorg.freedesktop.org/releases/individual/lib/%{name}-%{version}.tar.bz2
+Patch0:		pixman-aarch64.patch
 
 %description
 Pixel manipulation Library.
@@ -42,6 +43,7 @@ files to allow you to develop with pixman.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 %configure2_5x \
