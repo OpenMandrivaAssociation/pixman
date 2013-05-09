@@ -5,13 +5,20 @@
 
 Summary:	A pixel manipulation library
 Name:		pixman
-Version:	0.29.4
+Version:	0.30.0
 Release:	1
 License:	MIT
 Group:		System/Libraries
 URL:		http://gitweb.freedesktop.org/?p=pixman.git
 Source0:	http://xorg.freedesktop.org/releases/individual/lib/%{name}-%{version}.tar.bz2
 Patch0:		pixman-aarch64.patch
+
+%track
+prog %name = {
+	url = http://cairographics.org/releases/
+	version = %version
+	regex = pixman-(__VER__)\.tar\.gz
+}
 
 %description
 Pixel manipulation Library.
