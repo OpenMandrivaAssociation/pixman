@@ -5,8 +5,8 @@
 
 Summary:	A pixel manipulation library
 Name:		pixman
-Version:	0.32.6
-Release:	4
+Version:	0.32.8
+Release:	1
 License:	MIT
 Group:		System/Libraries
 Url:		http://gitweb.freedesktop.org/?p=pixman.git
@@ -25,7 +25,7 @@ Pixel manipulation Library.
 %package -n %{libname}
 Summary:	Pixel manipulation library
 Group:		System/Libraries
-Provides:	%{_lib}pixman-1_0
+Provides:	%{_lib}pixman-1_0 = 0.22.0
 Obsoletes:	%{_lib}pixman-1_0 < 0.22.0
 
 %description -n %{libname}
@@ -37,8 +37,8 @@ trapezoids, triangles, and rectangles.
 %package -n %{devname}
 Summary:	Libraries and include files for developing with libpixman
 Group:		Development/C
-Requires:	%{libname} = %{version}-%{release}
-Provides:	%{name}-devel = %{version}-%{release}
+Requires:	%{libname} = %{EVRD}
+Provides:	%{name}-devel = %{EVRD}
 Obsoletes:	%{_lib}pixman-1-devel < 0.22.0
 
 %description -n %{devname}
@@ -66,4 +66,3 @@ files to allow you to develop with pixman.
 %dir %{_includedir}/pixman-1
 %{_includedir}/pixman-1/*.h
 %{_libdir}/pkgconfig/*.pc
-
