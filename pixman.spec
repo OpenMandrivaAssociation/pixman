@@ -50,6 +50,10 @@ files to allow you to develop with pixman.
 
 %build
 %configure \
+%ifarch %{ix86} x86_64
+# (tpg) fir for clang issue
+	--disable-mmx \
+%endif
 	--disable-static
 
 %make
