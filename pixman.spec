@@ -11,9 +11,8 @@ License:	MIT
 Group:		System/Libraries
 Url:		http://gitweb.freedesktop.org/?p=pixman.git
 Source0:	http://xorg.freedesktop.org/releases/individual/lib/%{name}-%{version}.tar.bz2
-# (tpg) patches from upstream git
-Patch0:		0001-Revert-mmx-Use-MMX2-intrinsics-from-xmmintrin.h-dire.patch
-Patch1:		0002-mmx-Improve-detection-of-support-for-K-constraint.patch
+# (tpg) patch from upstream git
+Patch1:		0001-mmx-Improve-detection-of-support-for-K-constraint.patch
 
 %track
 prog %name = {
