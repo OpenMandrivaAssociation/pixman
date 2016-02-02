@@ -5,8 +5,8 @@
 
 Summary:	A pixel manipulation library
 Name:		pixman
-Version:	0.32.8
-Release:	2
+Version:	0.34.0
+Release:	1
 License:	MIT
 Group:		System/Libraries
 Url:		http://gitweb.freedesktop.org/?p=pixman.git
