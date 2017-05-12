@@ -2,11 +2,12 @@
 %define major 0
 %define libname %mklibname %{name} %{apiver} %{major}
 %define devname %mklibname %{name} -d
+%define staticname %mklibname %{name} -d -s
 
 Summary:	A pixel manipulation library
 Name:		pixman
 Version:	0.34.0
-Release:	1
+Release:	2
 License:	MIT
 Group:		System/Libraries
 Url:		http://gitweb.freedesktop.org/?p=pixman.git
@@ -45,13 +46,23 @@ Obsoletes:	%{_lib}pixman-1-devel < 0.22.0
 This package provides the necessary development libraries and include
 files to allow you to develop with pixman.
 
+%package -n %{staticname}
+Summary:	Libraries and include files for developing with libpixman
+Group:		Development/C
+Requires:	%{devname} = %{EVRD}
+Provides:	%{name}-static-devel = %{EVRD}
+
+%description -n %{staticname}
+This package provides the necessary development libraries
+files to allow you to link statically with pixman.
+
 %prep
 %setup -q
 %apply_patches
 
 %build
 %configure \
-        --disable-static
+        --enable-static
 
 %make
 
@@ -67,3 +78,6 @@ files to allow you to develop with pixman.
 %dir %{_includedir}/pixman-1
 %{_includedir}/pixman-1/*.h
 %{_libdir}/pkgconfig/*.pc
+
+%files -n %{staticname}
+%{_libdir}/*.a
