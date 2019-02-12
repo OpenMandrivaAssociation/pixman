@@ -6,7 +6,7 @@
 
 Summary:	A pixel manipulation library
 Name:		pixman
-Version:	0.36.0
+Version:	0.38.0
 Release:	1
 License:	MIT
 Group:		System/Libraries
@@ -50,17 +50,16 @@ This package provides the necessary development libraries
 files to allow you to link statically with pixman.
 
 %prep
-%setup -q
-%apply_patches
+%autosetup -p1
 
 %build
 %configure \
         --enable-static
 
-%make
+%make_build
 
 %install
-%makeinstall_std
+%make_install
 
 %files -n %{libname}
 %{_libdir}/*%{apiver}.so.%{major}*
