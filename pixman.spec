@@ -98,6 +98,9 @@ llvm-profdata merge --output=%{name}.profile ./build/*.profile.d
 unset LLVM_PROFILE_FILE
 unset LD_LIBRARY_PATH
 rm -f *.profile.d
+cd build
+ninja clean
+cd -
 rm -rf build
 
 CFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
@@ -121,8 +124,6 @@ LDFLAGS="%{ldflags} -fprofile-use" \
 %endif
 %ifarch %{ix86} %{x86_64}
     -Dmmx=enabled \
-%endif
-%ifarch %{x86_64}
     -Dsse2=enabled \
     -Dsse3=enabled \
 %endif
