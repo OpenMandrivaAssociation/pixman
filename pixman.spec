@@ -61,8 +61,8 @@ files to allow you to link statically with pixman.
 %build
 
 %if %{with pgo}
-CFLAGS_PGO="%{optflags} -fprofile-instr-generate" \
-CXXFLAGS_PGO="%{optflags} -fprofile-instr-generate" \
+CFLAGS_PGO="%{optflags} -fprofile-instr-generate"
+CXXFLAGS_PGO="%{optflags} -fprofile-instr-generate"
 FFLAGS_PGO="$CFLAGS_PGO"
 FCFLAGS_PGO="$CFLAGS_PGO"
 LDFLAGS_PGO="%{ldflags} -fprofile-instr-generate"
