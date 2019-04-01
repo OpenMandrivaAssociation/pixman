@@ -89,11 +89,11 @@ CFLAGS="${CFLAGS_PGO}" CXXFLAGS="${CXXFLAGS_PGO}" FFLAGS="${FFLAGS_PGO}" FCFLAGS
 %endif
 %ifarch %{x86_64}
     -Dsse2=enabled \
-    -Dsse3=enabled \
+    -Dssse3=enabled \
 %endif
     -Dopenmp=enabled
 
-%meson_test || :
+%meson_test || cat ./build/meson-logs/testlog.txt && exit 1
 llvm-profdata merge --output=%{name}.profile ./build/*.profile.d
 unset LLVM_PROFILE_FILE
 unset LD_LIBRARY_PATH
@@ -125,7 +125,7 @@ LDFLAGS="%{ldflags} -fprofile-use" \
 %ifarch %{ix86} %{x86_64}
     -Dmmx=enabled \
     -Dsse2=enabled \
-    -Dsse3=enabled \
+    -Dssse3=enabled \
 %endif
     -Dopenmp=enabled
 
