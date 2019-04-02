@@ -2,7 +2,6 @@
 %define major 0
 %define libname %mklibname %{name} %{apiver} %{major}
 %define devname %mklibname %{name} -d
-%define staticname %mklibname %{name} -d -s
 
 # (tpg) enable PGO build
 %bcond_without pgo
@@ -40,20 +39,12 @@ Group:		Development/C
 Requires:	%{libname} = %{EVRD}
 Provides:	%{name}-devel = %{EVRD}
 Obsoletes:	%{_lib}pixman-1-devel < 0.22.0
+Obsoletes:	%{mklibname %{name} -d -s} < 0.38.0-2
+Provides:	%{mklibname %{name} -d -s} = 0.38.0-2
 
 %description -n %{devname}
 This package provides the necessary development libraries and include
 files to allow you to develop with pixman.
-
-%package -n %{staticname}
-Summary:	Libraries and include files for developing with libpixman
-Group:		Development/C
-Requires:	%{devname} = %{EVRD}
-Provides:	%{name}-static-devel = %{EVRD}
-
-%description -n %{staticname}
-This package provides the necessary development libraries
-files to allow you to link statically with pixman.
 
 %prep
 %autosetup -p1
@@ -143,6 +134,3 @@ LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
 %dir %{_includedir}/pixman-1
 %{_includedir}/pixman-1/*.h
 %{_libdir}/pkgconfig/*.pc
-
-%files -n %{staticname}
-%{_libdir}/*.a
