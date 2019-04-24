@@ -71,8 +71,8 @@ CFLAGS="${CFLAGS_PGO}" CXXFLAGS="${CXXFLAGS_PGO}" FFLAGS="${FFLAGS_PGO}" FCFLAGS
     -Dmips-dspr2=disabled \
 %ifarch %{armx}
     -Dneon=enabled \
-    -Diwmmxt=enabled \
-    -Diwmmxt2=true \
+    -Diwmmxt=disabled \
+    -Diwmmxt2=false \
 %else
     -Dneon=disabled \
     -Diwmmxt=disabled \
@@ -111,10 +111,10 @@ LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
     -Dvmx=disabled \
     -Darm-simd=disabled \
     -Dmips-dspr2=disabled \
-%ifarch %{armx}
+%ifarch %{arm}
     -Dneon=enabled \
-    -Diwmmxt=enabled \
-    -Diwmmxt2=true \
+    -Diwmmxt=disabled \
+    -Diwmmxt2=false \
 %else
     -Dneon=disabled \
     -Diwmmxt=disabled \
