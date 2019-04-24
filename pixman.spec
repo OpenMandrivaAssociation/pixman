@@ -72,7 +72,7 @@ CFLAGS="${CFLAGS_PGO}" CXXFLAGS="${CXXFLAGS_PGO}" FFLAGS="${FFLAGS_PGO}" FCFLAGS
     -Dvmx=disabled \
     -Darm-simd=disabled \
     -Dmips-dspr2=disabled \
-%ifarch %{armx}
+%ifarch %{arm}
     -Dneon=enabled \
     -Diwmmxt=disabled \
     -Diwmmxt2=false \
