@@ -15,6 +15,7 @@ Group:		System/Libraries
 Url:		http://gitweb.freedesktop.org/?p=pixman.git
 Source0:	http://xorg.freedesktop.org/releases/individual/lib/%{name}-%{version}.tar.bz2
 BuildRequires:	pkgconfig(libpng)
+#BuildRequires:	gomp-devel
 BuildRequires:	meson
 BuildRequires:	ninja
 
