@@ -76,6 +76,7 @@ CFLAGS="${CFLAGS_PGO}" CXXFLAGS="${CXXFLAGS_PGO}" FFLAGS="${FFLAGS_PGO}" FCFLAGS
     -Dneon=enabled \
     -Diwmmxt=disabled \
     -Diwmmxt2=false \
+    -Dgnu-inline-asm=enabled
 %else
     -Dneon=disabled \
     -Diwmmxt=disabled \
@@ -93,8 +94,7 @@ CFLAGS="${CFLAGS_PGO}" CXXFLAGS="${CXXFLAGS_PGO}" FFLAGS="${FFLAGS_PGO}" FCFLAGS
     -Dsse2=disabled \
     -Dssse3=disabled \
 %endif
-    -Dopenmp=enabled \
-    -Dgnu-inline-asm=disabled
+    -Dopenmp=enabled
 
 %meson_test || :
 llvm-profdata merge --output=%{name}.profile ./pgo/*.profile.d
@@ -118,6 +118,7 @@ LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
     -Dneon=enabled \
     -Diwmmxt=disabled \
     -Diwmmxt2=false \
+    -Dgnu-inline-asm=enabled \
 %else
     -Dneon=disabled \
     -Diwmmxt=disabled \
