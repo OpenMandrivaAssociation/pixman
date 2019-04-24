@@ -80,12 +80,18 @@ CFLAGS="${CFLAGS_PGO}" CXXFLAGS="${CXXFLAGS_PGO}" FFLAGS="${FFLAGS_PGO}" FCFLAGS
 %endif
 %ifarch %{ix86} %{x86_64}
     -Dmmx=enabled \
+%else
+    -Dmmx=disabled \
 %endif
 %ifarch %{x86_64}
     -Dsse2=enabled \
     -Dssse3=enabled \
+%else
+    -Dsse2=disabled \
+    -Dssse3=disabled \
 %endif
-    -Dopenmp=enabled
+    -Dopenmp=enabled \
+    -Dgnu-inline-asm=disabled
 
 %meson_test || :
 llvm-profdata merge --output=%{name}.profile ./pgo/*.profile.d
@@ -118,6 +124,10 @@ LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
     -Dmmx=enabled \
     -Dsse2=enabled \
     -Dssse3=enabled \
+%else
+    -Dmmx=disabled \
+    -Dsse2=disabled \
+    -Dssse3=disabled \
 %endif
     -Dopenmp=enabled
 
