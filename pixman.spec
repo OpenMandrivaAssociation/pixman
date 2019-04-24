@@ -9,7 +9,7 @@
 Summary:	A pixel manipulation library
 Name:		pixman
 Version:	0.38.4
-Release:	2
+Release:	3
 License:	MIT
 Group:		System/Libraries
 Url:		http://gitweb.freedesktop.org/?p=pixman.git
@@ -28,7 +28,7 @@ Pixel manipulation Library.
 %package -n %{libname}
 Summary:	Pixel manipulation library
 Group:		System/Libraries
-Provides:	%{_lib}pixman-1_0 = 0.22.0
+Provides:	%{_lib}pixman-1_0 = %{EVRD}
 Obsoletes:	%{_lib}pixman-1_0 < 0.22.0
 
 %description -n %{libname}
@@ -44,7 +44,7 @@ Requires:	%{libname} = %{EVRD}
 Provides:	%{name}-devel = %{EVRD}
 Obsoletes:	%{_lib}pixman-1-devel < 0.22.0
 Obsoletes:	%{mklibname %{name} -d -s} < 0.38.0-2
-Provides:	%{mklibname %{name} -d -s} = %{version}-%{release}
+Provides:	%{mklibname %{name} -d -s} = %{EVRD}
 
 %description -n %{devname}
 This package provides the necessary development libraries and include
