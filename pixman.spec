@@ -76,7 +76,7 @@ CFLAGS="${CFLAGS_PGO}" CXXFLAGS="${CXXFLAGS_PGO}" FFLAGS="${FFLAGS_PGO}" FCFLAGS
     -Dneon=enabled \
     -Diwmmxt=disabled \
     -Diwmmxt2=false \
-    -Dgnu-inline-asm=enabled
+    -Dgnu-inline-asm=enabled \
 %else
     -Dneon=disabled \
     -Diwmmxt=disabled \
