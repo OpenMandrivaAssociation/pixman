@@ -4,7 +4,7 @@
 %define devname %mklibname %{name} -d
 
 # (tpg) enable PGO build
-%ifnarch armv7hl
+%ifnarch armv7hnl
 %bcond_without pgo
 %else
 %bcond_with pgo
