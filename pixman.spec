@@ -4,10 +4,10 @@
 %define devname %mklibname %{name} -d
 
 # (tpg) enable PGO build
-%ifnarch armv7hnl
 %bcond_without pgo
-%else
-%bcond_with pgo
+
+%ifarch armv7hnl
+%global optflags %{optflags} -fno-integrated-as
 %endif
 
 Summary:	A pixel manipulation library
@@ -80,11 +80,7 @@ CFLAGS="${CFLAGS_PGO}" CXXFLAGS="${CXXFLAGS_PGO}" FFLAGS="${FFLAGS_PGO}" FCFLAGS
     -Dneon=enabled \
     -Diwmmxt=disabled \
     -Diwmmxt2=false \
-%ifnarch armv7hnl
     -Dgnu-inline-asm=enabled \
-%else
-    -Dgnu-inline-asm=disabled \
-%endif
 %else
     -Dneon=disabled \
     -Diwmmxt=disabled \
