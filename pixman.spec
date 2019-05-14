@@ -80,7 +80,11 @@ CFLAGS="${CFLAGS_PGO}" CXXFLAGS="${CXXFLAGS_PGO}" FFLAGS="${FFLAGS_PGO}" FCFLAGS
     -Dneon=enabled \
     -Diwmmxt=disabled \
     -Diwmmxt2=false \
+%ifnarch armv7hnl
     -Dgnu-inline-asm=enabled \
+%else
+    -Dgnu-inline-asm=disabled \
+%endif
 %else
     -Dneon=disabled \
     -Diwmmxt=disabled \
