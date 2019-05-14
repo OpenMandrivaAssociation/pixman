@@ -4,7 +4,11 @@
 %define devname %mklibname %{name} -d
 
 # (tpg) enable PGO build
+%ifnarch armv7hl
 %bcond_without pgo
+%else
+%bcond_with pgo
+%endif
 
 Summary:	A pixel manipulation library
 Name:		pixman
