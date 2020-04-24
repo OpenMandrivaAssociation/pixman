@@ -98,7 +98,12 @@ CFLAGS="${CFLAGS_PGO}" CXXFLAGS="${CXXFLAGS_PGO}" FFLAGS="${FFLAGS_PGO}" FCFLAGS
     -Dsse2=disabled \
     -Dssse3=disabled \
 %endif
+%ifarch riscv64
+    -Dopenmp=disabled
+%else
     -Dopenmp=enabled
+%endif
+
 
 %meson_test || :
 llvm-profdata merge --output=%{name}.profile ./pgo/*.profile.d
@@ -137,7 +142,11 @@ LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
     -Dsse2=disabled \
     -Dssse3=disabled \
 %endif
+%ifarch riscv64
+    -Dopenmp=disabled
+%else
     -Dopenmp=enabled
+%endif
 
 %meson_build
 
