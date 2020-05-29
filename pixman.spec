@@ -1,7 +1,16 @@
+# pixman is used by various wine dependencies
+%ifarch %{x86_64}
+%bcond_without compat32
+%else
+%bcond_with compat32
+%endif
+
 %define apiver 1
 %define major 0
 %define libname %mklibname %{name} %{apiver} %{major}
 %define devname %mklibname %{name} -d
+%define lib32name %mklib32name %{name} %{apiver} %{major}
+%define dev32name %mklib32name %{name} -d
 
 # (tpg) enable PGO build
 %bcond_without pgo
@@ -13,18 +22,24 @@
 Summary:	A pixel manipulation library
 Name:		pixman
 Version:	0.40.0
-Release:	1
+Release:	2
 License:	MIT
 Group:		System/Libraries
 Url:		http://gitweb.freedesktop.org/?p=pixman.git
 Source0:	http://xorg.freedesktop.org/releases/individual/lib/%{name}-%{version}.tar.xz
 BuildRequires:	pkgconfig(libpng)
+BuildRequires:	pkgconfig(zlib)
 # remove me in future
 %ifarch riscv64
 BuildRequires:	gomp-devel
 %endif
 BuildRequires:	meson
 BuildRequires:	ninja
+%if %{with compat32}
+BuildRequires:	devel(libpng16)
+BuildRequires:	devel(libz)
+BuildRequires:	libgomp-devel
+%endif
 
 %description
 Pixel manipulation Library.
@@ -54,10 +69,50 @@ Provides:	%{mklibname %{name} -d -s} = %{EVRD}
 This package provides the necessary development libraries and include
 files to allow you to develop with pixman.
 
+%if %{with compat32}
+%package -n %{lib32name}
+Summary:	Pixel manipulation library (32-bit)
+Group:		System/Libraries
+
+%description -n %{lib32name}
+A library for manipulating pixel regions -- a set of Y-X banded
+rectangles, image compositing using the Porter/Duff model
+and implicit mask generation for geometric primitives including
+trapezoids, triangles, and rectangles.
+
+%package -n %{dev32name}
+Summary:	Libraries and include files for developing with libpixman (32-bit)
+Group:		Development/C
+Requires:	%{devname} = %{EVRD}
+Requires:	%{lib32name} = %{EVRD}
+
+%description -n %{dev32name}
+This package provides the necessary development libraries and include
+files to allow you to develop with pixman.
+%endif
+
 %prep
 %autosetup -p1
 
 %build
+export CONFIGURE_TOP="$(pwd)"
+%if %{with compat32}
+%meson32 \
+    -Dgtk=disabled \
+    -Dlibpng=enabled \
+    -Dloongson-mmi=disabled \
+    -Dneon=disabled \
+    -Diwmmxt=disabled \
+    -Diwmmxt2=false \
+    -Dvmx=disabled \
+    -Darm-simd=disabled \
+    -Dmips-dspr2=disabled \
+    -Dmmx=enabled \
+    -Dsse2=enabled \
+    -Dssse3=enabled \
+    -Dopenmp=enabled
+%ninja_build -C build32
+%endif
 
 %if %{with pgo}
 CFLAGS_PGO="%{optflags} -fprofile-instr-generate"
@@ -151,6 +206,9 @@ LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
 %meson_build
 
 %install
+%if %{with compat32}
+%ninja_install -C build32
+%endif
 %meson_install
 
 %files -n %{libname}
@@ -162,3 +220,12 @@ LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
 %dir %{_includedir}/pixman-1
 %{_includedir}/pixman-1/*.h
 %{_libdir}/pkgconfig/*.pc
+
+%if %{with compat32}
+%files -n %{lib32name}
+%{_prefix}/lib/*%{apiver}.so.%{major}*
+
+%files -n %{dev32name}
+%{_prefix}/lib/*.so
+%{_prefix}/lib/pkgconfig/*.pc
+%endif
