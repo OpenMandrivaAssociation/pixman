@@ -13,7 +13,7 @@
 %define dev32name %mklib32name %{name} -d
 
 # (tpg) enable PGO build
-%bcond_without pgo
+%bcond_with pgo
 
 %ifarch armv7hnl
 %global optflags %{optflags} -fno-integrated-as
