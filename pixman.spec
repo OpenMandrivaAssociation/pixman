@@ -13,20 +13,24 @@
 %define dev32name %mklib32name %{name} -d
 
 # (tpg) enable PGO build
-%bcond_with pgo
+%bcond_without pgo
 
-%ifarch armv7hnl
-%global optflags %{optflags} -fno-integrated-as
+%ifarch %{armx}
+%global optflags %{optflags} -O3 -fno-integrated-as -ftrapping-math
+%else
+%global optflags %{optflags} -O3 -ftrapping-math
 %endif
 
 Summary:	A pixel manipulation library
 Name:		pixman
 Version:	0.40.0
-Release:	2
+Release:	3
 License:	MIT
 Group:		System/Libraries
 Url:		http://gitweb.freedesktop.org/?p=pixman.git
 Source0:	http://xorg.freedesktop.org/releases/individual/lib/%{name}-%{version}.tar.xz
+# (tpg) enable SIMD accelerations for pixman on aarch64
+Patch0:		0000-added-aarch64-bilinear-implementations-ver.4.1.patch
 BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(zlib)
 # remove me in future
@@ -42,7 +46,7 @@ BuildRequires:	libgomp-devel
 %endif
 
 %description
-Pixel manipulation Library.
+The pixel-manipulation library for X and cairo
 
 %package -n %{libname}
 Summary:	Pixel manipulation library
@@ -107,39 +111,43 @@ export CONFIGURE_TOP="$(pwd)"
     -Dvmx=disabled \
     -Darm-simd=disabled \
     -Dmips-dspr2=disabled \
+    -Da64-neon=disabled \
     -Dmmx=enabled \
     -Dsse2=enabled \
     -Dssse3=enabled \
     -Dopenmp=enabled
+
 %ninja_build -C build32
 %endif
 
 %if %{with pgo}
-CFLAGS_PGO="%{optflags} -fprofile-instr-generate"
-CXXFLAGS_PGO="%{optflags} -fprofile-instr-generate"
-FFLAGS_PGO="$CFLAGS_PGO"
-FCFLAGS_PGO="$CFLAGS_PGO"
-LDFLAGS_PGO="%{ldflags} -fprofile-instr-generate"
-export LLVM_PROFILE_FILE=%{name}-%p.profile.d
 export LD_LIBRARY_PATH="$(pwd)"
 %define _vpath_builddir pgo
 mkdir pgo
-CFLAGS="${CFLAGS_PGO}" CXXFLAGS="${CXXFLAGS_PGO}" FFLAGS="${FFLAGS_PGO}" FCFLAGS="${FCFLAGS_PGO}" LDFLAGS="${LDFLAGS_PGO}" CC="%{__cc}" %meson \
+
+CFLAGS="%{optflags} -fprofile-generate" \
+CXXFLAGS="%{optflags} -fprofile-generate" \
+LDFLAGS="%{build_ldflags} -fprofile-generate" \
+CC="%{__cc}" \
+%meson \
     -Dgtk=disabled \
     -Dlibpng=enabled \
     -Dloongson-mmi=disabled \
     -Dvmx=disabled \
     -Darm-simd=disabled \
     -Dmips-dspr2=disabled \
-%ifarch %{arm}
-    -Dneon=enabled \
     -Diwmmxt=disabled \
     -Diwmmxt2=false \
+%ifarch %{arm}
+    -Dneon=enabled \
     -Dgnu-inline-asm=enabled \
 %else
     -Dneon=disabled \
-    -Diwmmxt=disabled \
-    -Diwmmxt2=false \
+%endif
+%ifarch aarch64
+    -Da64-neon=enabled \
+%else
+    -Da64-neon=disabled \
 %endif
 %ifarch %{ix86} %{x86_64}
     -Dmmx=enabled \
@@ -159,34 +167,38 @@ CFLAGS="${CFLAGS_PGO}" CXXFLAGS="${CXXFLAGS_PGO}" FFLAGS="${FFLAGS_PGO}" FCFLAGS
     -Dopenmp=enabled
 %endif
 
-
 %meson_test || :
-llvm-profdata merge --output=%{name}.profile ./pgo/*.profile.d
-rm -f *.profile.d
+llvm-profdata merge --output=%{name}-llvm.profdata ./pgo/*.profraw
+PROFDATA="$(realpath %{name}-llvm.profdata)"
+rm -f pgo/*.profraw
 cd pgo
 ninja clean
 cd -
 rm -rf pgo
 %undefine _vpath_builddir
-CFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
-CXXFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
-LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
+CFLAGS="%{optflags} -fprofile-use=$PROFDATA" \
+CXXFLAGS="%{optflags} -fprofile-use=$PROFDATA" \
+LDFLAGS="%{build_ldflags} -fprofile-use=$PROFDATA" \
 %endif
-%meson -Dgtk=disabled \
+%meson \
+    -Dgtk=disabled \
     -Dlibpng=enabled \
     -Dloongson-mmi=disabled \
     -Dvmx=disabled \
     -Darm-simd=disabled \
     -Dmips-dspr2=disabled \
-%ifarch %{arm}
-    -Dneon=enabled \
     -Diwmmxt=disabled \
     -Diwmmxt2=false \
+%ifarch %{arm}
+    -Dneon=enabled \
     -Dgnu-inline-asm=enabled \
 %else
     -Dneon=disabled \
-    -Diwmmxt=disabled \
-    -Diwmmxt2=false \
+%endif
+%ifarch aarch64
+    -Da64-neon=enabled \
+%else
+    -Da64-neon=disabled \
 %endif
 %ifarch %{ix86} %{x86_64}
     -Dmmx=enabled \
