@@ -1,0 +1,53 @@
+From c2fe1568ff00cba0c71667e6ba8ce1549ead2385 Mon Sep 17 00:00:00 2001
+From: Tom Stellard <tstellar@redhat.com>
+Date: Mon, 11 May 2020 22:17:08 +0000
+Subject: [PATCH] Add -ftrapping-math to default cflags
+
+This should resolve https://gitlab.freedesktop.org/pixman/pixman/-/issues/22
+and make the tests pass with clang.
+
+-ftrapping-math is already the default[1] for gcc, so this should not change
+behavior when compiling with gcc.  However, clang defaults[2] to -fno-trapping-math,
+so -ftrapping-math is needed to avoid floating-point expceptions when running the
+combiner and stress tests.
+
+The root causes of this issue is that that pixman-combine-float.c guards floating-point
+division operations with a FLOAT_IS_ZERO check e.g.
+
+if (FLOAT_IS_ZERO (sa))
+	f = 1.0f;
+else
+	f = CLAMP (da / sa);
+
+With -fno-trapping-math, the compiler assumes that division will never trap, so it may
+re-order the division and the guard and execute the division first.  In most cases,
+this would not be an issue, because floating-point exceptions are ignored.  However,
+these tests call enable_divbyzero_exceptions() which causes the SIGFPE signal to
+be sent to the program when a divide by zero exception is raised.
+
+[1] https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html
+[2] https://clang.llvm.org/docs/UsersManual.html#controlling-floating-point-behavior
+---
+ meson.build | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/meson.build b/meson.build
+index 5d65417..91d6578 100644
+--- a/meson.build
++++ b/meson.build
+@@ -37,6 +37,12 @@ add_project_arguments(
+     '-fno-strict-aliasing',
+     '-fvisibility=hidden',
+     '-Wundef',
++    # -ftrapping-math is the default for gcc, but -fno-trapping-math is the
++    # default for clang.  The FLOAT_IS_ZERO macro is used to guard against
++    # floating-point exceptions, however with -fno-trapping-math, the compiler
++    # can reorder floating-point operations so that they occur before the guard.
++    # Note, this function is ignored in clang < 10.0.0.
++    '-ftrapping-math'
+   ]),
+   language : ['c']
+ )
+-- 
+2.34.1
+

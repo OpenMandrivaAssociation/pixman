@@ -13,24 +13,29 @@
 %define dev32name %mklib32name %{name} -d
 
 # (tpg) enable PGO build
-%bcond_without pgo
+# (tpg) 2022-01-11 currently weston and weston-keyboard are segfaulting on aarch64
+#	2  0x0000ffffa2f3ac18 in pixman_image_unref () from /usr/lib64/libpixman-1.so.0
+%bcond_with pgo
 
 %ifarch %{armx}
-%global optflags %{optflags} -O3 -fno-integrated-as -ftrapping-math
+%global optflags %{optflags} -O3 -fno-integrated-as
 %else
-%global optflags %{optflags} -O3 -ftrapping-math
+%global optflags %{optflags} -O3
 %endif
 
 Summary:	A pixel manipulation library
 Name:		pixman
 Version:	0.40.0
-Release:	3
+Release:	4
 License:	MIT
 Group:		System/Libraries
 Url:		http://gitweb.freedesktop.org/?p=pixman.git
 Source0:	http://xorg.freedesktop.org/releases/individual/lib/%{name}-%{version}.tar.xz
+# (tpg) patches form upstream
+Patch0:		0000-Prevent-empty-top-level-declaration.patch
+Patch1:		0001-Add-ftrapping-math-to-default-cflags.patch
 # (tpg) enable SIMD accelerations for pixman on aarch64
-Patch0:		0000-added-aarch64-bilinear-implementations-ver.4.1.patch
+Patch2:		0000-added-aarch64-bilinear-implementations-ver.4.1.patch
 BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(zlib)
 # remove me in future
@@ -46,7 +51,7 @@ BuildRequires:	libgomp-devel
 %endif
 
 %description
-The pixel-manipulation library for X and cairo
+The pixel-manipulation library for X and cairo.
 
 %package -n %{libname}
 Summary:	Pixel manipulation library
@@ -99,7 +104,6 @@ files to allow you to develop with pixman.
 %autosetup -p1
 
 %build
-export CONFIGURE_TOP="$(pwd)"
 %if %{with compat32}
 %meson32 \
     -Dgtk=disabled \
@@ -168,7 +172,7 @@ CC="%{__cc}" \
 %endif
 
 %meson_test || :
-llvm-profdata merge --output=%{name}-llvm.profdata ./pgo/*.profraw
+llvm-profdata merge --output=%{name}-llvm.profdata $(find ./pgo -name "*.profraw" -type f)
 PROFDATA="$(realpath %{name}-llvm.profdata)"
 rm -f pgo/*.profraw
 cd pgo
@@ -176,6 +180,7 @@ ninja clean
 cd -
 rm -rf pgo
 %undefine _vpath_builddir
+
 CFLAGS="%{optflags} -fprofile-use=$PROFDATA" \
 CXXFLAGS="%{optflags} -fprofile-use=$PROFDATA" \
 LDFLAGS="%{build_ldflags} -fprofile-use=$PROFDATA" \
