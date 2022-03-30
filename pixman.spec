@@ -18,6 +18,7 @@
 %bcond_with pgo
 
 %ifarch %{armx}
+#(tpg) https://gitlab.freedesktop.org/pixman/pixman/-/issues/46
 %global optflags %{optflags} -O3 -fno-integrated-as
 %else
 %global optflags %{optflags} -O3
@@ -26,7 +27,7 @@
 Summary:	A pixel manipulation library
 Name:		pixman
 Version:	0.40.0
-Release:	4
+Release:	5
 License:	MIT
 Group:		System/Libraries
 Url:		http://gitweb.freedesktop.org/?p=pixman.git
@@ -36,16 +37,14 @@ Patch0:		0000-Prevent-empty-top-level-declaration.patch
 Patch1:		0001-Add-ftrapping-math-to-default-cflags.patch
 # (tpg) enable SIMD accelerations for pixman on aarch64
 Patch2:		0000-added-aarch64-bilinear-implementations-ver.4.1.patch
-BuildRequires:	pkgconfig(libpng)
+
+BuildRequires:	meson
 BuildRequires:	pkgconfig(zlib)
-# remove me in future
-%ifarch riscv64
+%if %{with pgo}
+BuildRequires:	pkgconfig(libpng)
 BuildRequires:	gomp-devel
 %endif
-BuildRequires:	meson
-BuildRequires:	ninja
 %if %{with compat32}
-BuildRequires:	devel(libpng16)
 BuildRequires:	devel(libz)
 %endif
 
@@ -106,7 +105,7 @@ files to allow you to develop with pixman.
 %if %{with compat32}
 %meson32 \
     -Dgtk=disabled \
-    -Dlibpng=enabled \
+    -Dlibpng=disabled \
     -Dloongson-mmi=disabled \
     -Dneon=disabled \
     -Diwmmxt=disabled \
@@ -148,7 +147,7 @@ CC="%{__cc}" \
     -Dneon=disabled \
 %endif
 %ifarch aarch64
-    -Da64-neon=enabled \
+    -Da64-neon=disabled \
 %else
     -Da64-neon=disabled \
 %endif
@@ -164,11 +163,7 @@ CC="%{__cc}" \
     -Dsse2=disabled \
     -Dssse3=disabled \
 %endif
-%ifarch riscv64
-    -Dopenmp=disabled
-%else
     -Dopenmp=enabled
-%endif
 
 %meson_test || :
 llvm-profdata merge --output=%{name}-llvm.profdata $(find ./pgo -name "*.profraw" -type f)
@@ -186,7 +181,7 @@ LDFLAGS="%{build_ldflags} -fprofile-use=$PROFDATA" \
 %endif
 %meson \
     -Dgtk=disabled \
-    -Dlibpng=enabled \
+    -Dlibpng=disabled \
     -Dloongson-mmi=disabled \
     -Dvmx=disabled \
     -Darm-simd=disabled \
@@ -200,7 +195,7 @@ LDFLAGS="%{build_ldflags} -fprofile-use=$PROFDATA" \
     -Dneon=disabled \
 %endif
 %ifarch aarch64
-    -Da64-neon=enabled \
+    -Da64-neon=disabled \
 %else
     -Da64-neon=disabled \
 %endif
@@ -213,11 +208,7 @@ LDFLAGS="%{build_ldflags} -fprofile-use=$PROFDATA" \
     -Dsse2=disabled \
     -Dssse3=disabled \
 %endif
-%ifarch riscv64
     -Dopenmp=disabled
-%else
-    -Dopenmp=enabled
-%endif
 
 %meson_build
 
