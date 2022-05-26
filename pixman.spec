@@ -13,9 +13,7 @@
 %define dev32name %mklib32name %{name} -d
 
 # (tpg) enable PGO build
-# (tpg) 2022-01-11 currently weston and weston-keyboard are segfaulting on aarch64
-#	2  0x0000ffffa2f3ac18 in pixman_image_unref () from /usr/lib64/libpixman-1.so.0
-%bcond_with pgo
+%bcond_without pgo
 
 %ifarch %{armx}
 #(tpg) https://gitlab.freedesktop.org/pixman/pixman/-/issues/46
@@ -147,7 +145,7 @@ CC="%{__cc}" \
     -Dneon=disabled \
 %endif
 %ifarch aarch64
-    -Da64-neon=disabled \
+    -Da64-neon=enabled \
 %else
     -Da64-neon=disabled \
 %endif
@@ -195,7 +193,7 @@ LDFLAGS="%{build_ldflags} -fprofile-use=$PROFDATA" \
     -Dneon=disabled \
 %endif
 %ifarch aarch64
-    -Da64-neon=disabled \
+    -Da64-neon=enabled \
 %else
     -Da64-neon=disabled \
 %endif
