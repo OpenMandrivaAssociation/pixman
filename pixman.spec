@@ -24,17 +24,12 @@
 
 Summary:	A pixel manipulation library
 Name:		pixman
-Version:	0.40.0
-Release:	6
+Version:	0.42.0
+Release:	1
 License:	MIT
 Group:		System/Libraries
 Url:		http://gitweb.freedesktop.org/?p=pixman.git
 Source0:	http://xorg.freedesktop.org/releases/individual/lib/%{name}-%{version}.tar.xz
-# (tpg) patches form upstream
-Patch0:		0000-Prevent-empty-top-level-declaration.patch
-Patch1:		0001-Add-ftrapping-math-to-default-cflags.patch
-# (tpg) enable SIMD accelerations for pixman on aarch64
-Patch2:		0000-added-aarch64-bilinear-implementations-ver.4.1.patch
 
 BuildRequires:	meson
 BuildRequires:	pkgconfig(zlib)
@@ -115,7 +110,8 @@ files to allow you to develop with pixman.
     -Dmmx=enabled \
     -Dsse2=enabled \
     -Dssse3=enabled \
-    -Dopenmp=disabled
+    -Dopenmp=disabled \
+    -Dtests=disabled
 
 %ninja_build -C build32
 %endif
@@ -131,6 +127,7 @@ LDFLAGS="%{build_ldflags} -fprofile-generate" \
 CC="%{__cc}" \
 %meson \
     -Dgtk=disabled \
+    -Dtests=enabled \
     -Dlibpng=enabled \
     -Dloongson-mmi=disabled \
     -Dvmx=disabled \
@@ -179,6 +176,7 @@ LDFLAGS="%{build_ldflags} -fprofile-use=$PROFDATA" \
 %endif
 %meson \
     -Dgtk=disabled \
+    -Dtests=disabled \
     -Dlibpng=disabled \
     -Dloongson-mmi=disabled \
     -Dvmx=disabled \
