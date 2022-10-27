@@ -30,7 +30,8 @@ License:	MIT
 Group:		System/Libraries
 Url:		http://gitweb.freedesktop.org/?p=pixman.git
 Source0:	http://xorg.freedesktop.org/releases/individual/lib/%{name}-%{version}.tar.xz
-
+# (tpg) 2022-10-27 somehow this file is missing from tarball
+Source1:	a64-neon-test.S
 BuildRequires:	meson
 BuildRequires:	pkgconfig(zlib)
 %if %{with pgo}
@@ -93,6 +94,8 @@ files to allow you to develop with pixman.
 
 %prep
 %autosetup -p1
+
+cp %{SOURCE1} .
 
 %build
 %if %{with compat32}
