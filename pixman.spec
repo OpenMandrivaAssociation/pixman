@@ -24,7 +24,7 @@
 
 Summary:	A pixel manipulation library
 Name:		pixman
-Version:	0.42.0
+Version:	0.42.2
 Release:	1
 License:	MIT
 Group:		System/Libraries
