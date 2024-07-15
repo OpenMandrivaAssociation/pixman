@@ -12,8 +12,15 @@
 %define lib32name %mklib32name %{name} %{apiver} %{major}
 %define dev32name %mklib32name %{name} -d
 
-# (tpg) enable PGO build
+# (tpg) enable PGO build, except on RISC-V for now
+# (as of 2024/07/15, RISC-V is missing libclang_rt.profile-riscv64.a
+# this restriction will likely go away as soon as we start building
+# packages there natively)
+%ifarch %{riscv}
+%bcond_with pgo
+%else
 %bcond_without pgo
+%endif
 
 %ifarch %{armx}
 #(tpg) https://gitlab.freedesktop.org/pixman/pixman/-/issues/46
@@ -97,6 +104,7 @@ files to allow you to develop with pixman.
 %if %{with compat32}
 %meson32 \
     -Dgtk=disabled \
+    -Ddemos=disabled \
     -Dlibpng=disabled \
     -Dloongson-mmi=disabled \
     -Dneon=disabled \
@@ -126,6 +134,7 @@ LDFLAGS="%{build_ldflags} -fprofile-generate" \
 CC="%{__cc}" \
 %meson \
     -Dgtk=disabled \
+    -Ddemos=disabled \
     -Dtests=enabled \
     -Dlibpng=enabled \
     -Dloongson-mmi=disabled \
@@ -175,6 +184,7 @@ LDFLAGS="%{build_ldflags} -fprofile-use=$PROFDATA" \
 %endif
 %meson \
     -Dgtk=disabled \
+    -Ddemos=disabled \
     -Dtests=disabled \
     -Dlibpng=disabled \
     -Dloongson-mmi=disabled \
