@@ -35,7 +35,7 @@ Version:	0.43.4
 Release:	1
 License:	MIT
 Group:		System/Libraries
-Url:		http://gitweb.freedesktop.org/?p=pixman.git
+Url:		https://gitweb.freedesktop.org/?p=pixman.git
 Source0:	http://xorg.freedesktop.org/releases/individual/lib/%{name}-%{version}.tar.xz
 BuildRequires:	meson
 BuildRequires:	pkgconfig(zlib)
