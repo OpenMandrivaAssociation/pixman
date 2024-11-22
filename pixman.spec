@@ -108,8 +108,6 @@ files to allow you to develop with pixman.
     -Dlibpng=disabled \
     -Dloongson-mmi=disabled \
     -Dneon=disabled \
-    -Diwmmxt=disabled \
-    -Diwmmxt2=false \
     -Dvmx=disabled \
     -Darm-simd=disabled \
     -Dmips-dspr2=disabled \
@@ -141,8 +139,6 @@ CC="%{__cc}" \
     -Dvmx=disabled \
     -Darm-simd=disabled \
     -Dmips-dspr2=disabled \
-    -Diwmmxt=disabled \
-    -Diwmmxt2=false \
 %ifarch %{arm}
     -Dneon=enabled \
     -Dgnu-inline-asm=enabled \
@@ -191,8 +187,6 @@ LDFLAGS="%{build_ldflags} -fprofile-use=$PROFDATA" \
     -Dvmx=disabled \
     -Darm-simd=disabled \
     -Dmips-dspr2=disabled \
-    -Diwmmxt=disabled \
-    -Diwmmxt2=false \
 %ifarch %{arm}
     -Dneon=enabled \
     -Dgnu-inline-asm=enabled \
