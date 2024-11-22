@@ -116,7 +116,7 @@ files to allow you to develop with pixman.
     -Dsse2=enabled \
     -Dssse3=enabled \
     -Dopenmp=disabled \
-    -Drvv-enabled \
+    -Drvv=enabled \
     -Dtests=disabled
 
 %ninja_build -C build32
@@ -163,7 +163,7 @@ CC="%{__cc}" \
     -Dsse2=disabled \
     -Dssse3=disabled \
 %endif
-    -Drvv-enabled \
+    -Drvv=enabled \
     -Dopenmp=enabled
 
 %meson_test || :
@@ -209,7 +209,7 @@ LDFLAGS="%{build_ldflags} -fprofile-use=$PROFDATA" \
     -Dsse2=disabled \
     -Dssse3=disabled \
 %endif
-    -Drvv-enabled \
+    -Drvv=enabled \
     -Dopenmp=disabled
 
 %meson_build
