@@ -127,6 +127,7 @@ export LD_LIBRARY_PATH="$(pwd)"
 %define _vpath_builddir pgo
 mkdir pgo
 
+# Enabling rvv breaks RISC-V boxes without vector extensions
 CFLAGS="%{optflags} -fprofile-generate" \
 CXXFLAGS="%{optflags} -fprofile-generate" \
 LDFLAGS="%{build_ldflags} -fprofile-generate" \
@@ -163,11 +164,7 @@ CC="%{__cc}" \
     -Dsse2=disabled \
     -Dssse3=disabled \
 %endif
-%ifarch %{riscv}
-    -Drvv=enabled \
-%else    
     -Drvv=disabled \
-%endif    
     -Dopenmp=enabled
 
 %meson_test || :
@@ -213,11 +210,7 @@ LDFLAGS="%{build_ldflags} -fprofile-use=$PROFDATA" \
     -Dsse2=disabled \
     -Dssse3=disabled \
 %endif
-%ifarch %{riscv}
-    -Drvv=enabled \
-%else    
     -Drvv=disabled \
-%endif    
     -Dopenmp=disabled
 
 %meson_build
